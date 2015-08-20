@@ -13,7 +13,7 @@
 2. Include plugin's code:
 
 	```html
-	<script src="dist/jquery.async-navigator.min.js"></script>
+	<script src="bower_components/jquery-async-navigator/dist/jquery-async-navigator.min.js"></script>
 	```
 
 3. Call the plugin:
@@ -45,11 +45,11 @@ The basic structure of the project is given in the following way:
 ├── demo/
 │   └── index.html
 ├── dist/
-│   ├── jquery.async-nvaigator.js
+│   ├── jquery-async-nvaigator.js
 │   └── jquery.async-navigator.min.js
 ├── src/
-│   ├── jquery.async-nvaigator.coffee
-│   └── jquery.async-nvaigator.js
+│   ├── jquery-async-nvaigator.coffee
+│   └── jquery-async-nvaigator.js
 ├── .editorconfig
 ├── .gitignore
 ├── .jshintrc
@@ -58,55 +58,55 @@ The basic structure of the project is given in the following way:
 └── package.json
 ```
 
-#### [demo/](https://github.com/jquery-async-navigator/boilerplate/tree/master/demo)
+#### [demo/](https://github.com/electblake/jquery-async-navigator/tree/master/demo)
 
 Contains a simple HTML file to demonstrate your plugin.
 
-#### [dist/](https://github.com/jquery-async-navigator/boilerplate/tree/master/dist)
+#### [dist/](https://github.com/electblake/jquery-async-navigator/tree/master/dist)
 
 This is where the generated files are stored once Grunt runs.
 
-#### [src/](https://github.com/jquery-async-navigator/boilerplate/tree/master/src)
+#### [src/](https://github.com/electblake/jquery-async-navigator/tree/master/src)
 
 Contains the files responsible for your plugin, you can choose between JavaScript or CoffeeScript.
 
-#### [.editorconfig](https://github.com/jquery-async-navigator/boilerplate/tree/master/.editorconfig)
+#### [.editorconfig](https://github.com/electblake/jquery-async-navigator/tree/master/.editorconfig)
 
 This file is for unifying the coding style for different editors and IDEs.
 
 > Check [editorconfig.org](http://editorconfig.org) if you haven't heard about this project yet.
 
-#### [.gitignore](https://github.com/jquery-async-navigator/boilerplate/tree/master/.gitignore)
+#### [.gitignore](https://github.com/electblake/jquery-async-navigator/tree/master/.gitignore)
 
 List of files that we don't want Git to track.
 
 > Check this [Git Ignoring Files Guide](https://help.github.com/articles/ignoring-files) for more details.
 
-#### [.jshintrc](https://github.com/jquery-async-navigator/boilerplate/tree/master/.jshintrc)
+#### [.jshintrc](https://github.com/electblake/jquery-async-navigator/tree/master/.jshintrc)
 
 List of rules used by JSHint to detect errors and potential problems in JavaScript.
 
 > Check [jshint.com](http://jshint.com/about/) if you haven't heard about this project yet.
 
-#### [.travis.yml](https://github.com/jquery-async-navigator/boilerplate/tree/master/.travis.yml)
+#### [.travis.yml](https://github.com/electblake/jquery-async-navigator/tree/master/.travis.yml)
 
 Definitions for continous integration using Travis.
 
 > Check [travis-ci.org](http://about.travis-ci.org/) if you haven't heard about this project yet.
 
-#### [boilerplate.jquery.json](https://github.com/jquery-async-navigator/boilerplate/tree/master/boilerplate.jquery.json)
+#### [boilerplate.jquery.json](https://github.com/electblake/jquery-async-navigator/tree/master/boilerplate.jquery.json)
 
 Package manifest file used to publish plugins in jQuery Plugin Registry.
 
 > Check this [Package Manifest Guide](http://plugins.jquery.com/docs/package-manifest/) for more details.
 
-#### [Gruntfile.js](https://github.com/jquery-async-navigator/boilerplate/tree/master/Gruntfile.js)
+#### [Gruntfile.js](https://github.com/electblake/jquery-async-navigator/tree/master/Gruntfile.js)
 
 Contains all automated tasks using Grunt.
 
 > Check [gruntjs.com](http://gruntjs.com) if you haven't heard about this project yet.
 
-#### [package.json](https://github.com/jquery-async-navigator/boilerplate/tree/master/package.json)
+#### [package.json](https://github.com/electblake/jquery-async-navigator/tree/master/package.json)
 
 Specify all dependencies loaded via Node.JS.
 
@@ -114,7 +114,7 @@ Specify all dependencies loaded via Node.JS.
 
 ## Contributing
 
-Check [CONTRIBUTING.md](https://github.com/jquery-async-navigator/boilerplate/blob/master/CONTRIBUTING.md) for more information.
+Check [CONTRIBUTING.md](https://github.com/electblake/jquery-async-navigator/blob/master/CONTRIBUTING.md) for more information.
 
 ## History
 

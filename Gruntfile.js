@@ -23,14 +23,14 @@ module.exports = function(grunt) {
 				banner: "<%= meta.banner %>"
 			},
 			dist: {
-				src: ["src/jquery.async-navigator.js"],
-				dest: "dist/jquery.async-navigator.js"
+				src: ["src/jquery-async-navigator.js"],
+				dest: "dist/jquery-async-navigator.js"
 			}
 		},
 
 		// Lint definitions
 		jshint: {
-			files: ["src/jquery.async-navigator.js"],
+			files: ["src/jquery-async-navigator.js"],
 			options: {
 				jshintrc: ".jshintrc"
 			}
@@ -39,8 +39,8 @@ module.exports = function(grunt) {
 		// Minify definitions
 		uglify: {
 			my_target: {
-				src: ["dist/jquery.async-navigator.js"],
-				dest: "dist/jquery.async-navigator.min.js"
+				src: ["dist/jquery-async-navigator.js"],
+				dest: "dist/jquery-async-navigator.min.js"
 			},
 			options: {
 				banner: "<%= meta.banner %>"
@@ -51,7 +51,7 @@ module.exports = function(grunt) {
 		coffee: {
 			compile: {
 				files: {
-					"dist/jquery.async-navigator.js": "src/jquery.boilerplate.coffee"
+					"dist/jquery-async-navigator.js": "src/jquery.boilerplate.coffee"
 				}
 			}
 		},
