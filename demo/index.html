@@ -1,17 +1,41 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>jQuery Boilerplate</title>
+		<title>jQuery Async Navigator</title>
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
 		<script src="../src/jquery.async-navigator.js"></script>
 	</head>
 	<body>
-		<div id="element"></div>
+		<div id="custom-wrapper">
+			<h1>Homepage content</h1>
+			<ul>
+				<li><a href="./about.html" class="async-navigator">About</a></li>
+				<li><a href="./help.html" class="async-navigator">Help</a></li>
+			</ul>
+		</div>
 		<script>
 			$(function() {
-				$("#element").defaultPluginName({
-					propertyName: "a custom value"
-				});
+				jQuery('#custom-wrapper').asyncNavigator();
+				
+				// get api
+				var navigator = jQuery('#custom-wrapper').data('plugin_asyncNavigator');
+
+				jQuery('.async-navigator').on('click', function(event) {
+					// now somewhere there is clicking, step in and give it the href
+					navigator.asyncNextPage(this.attr('href'), function(err){
+						if (err) {
+							console.error("error");
+						}
+					});
+					// or you can just get the nextPage and handle updating the page yourself
+					// navigator.getNextPage(href, function(err, nextPage) {
+					// 	console.log('nextPage', nextPage);
+					// });
+					event.preventDefault();
+				})
+				
+
+				
 			});
 		</script>
 	</body>
