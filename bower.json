@@ -1,0 +1,17 @@
+{
+  "name": "jquery-async-navigator",
+  "version": "0.0.1",
+  "description": "Provides async navigation to legacy browser request/loading based websites.",
+  "homepage": "https://github.com/electblake/jquery-async-navigator",
+  "authors": [
+    "Blake E <electblake@gmail.com>"
+  ],
+  "main": "src/jquery.async-navigator.min.js",
+  "keywords": [
+    "jquery",
+    "plugin",
+    "async",
+    "jquery-plugin"
+  ],
+  "license": "MIT"
+}
