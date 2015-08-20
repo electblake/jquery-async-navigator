@@ -1,4 +1,4 @@
-# jQuery Async Navigator [![Build Status](https://secure.travis-ci.org/jquery-async-navigator/jquery-async-navigator.svg?branch=master)](https://travis-ci.org/jquery-async-navigator/jquery-async-navigator) ![Bower Version](https://badge.fury.io/bo/jquery-async-navigator.svg)
+# jQuery Async Navigator [![Build Status](https://travis-ci.org/electblake/jquery-async-navigator.svg?branch=master)](https://travis-ci.org/electblake/jquery-async-navigator) ![Bower Version](https://badge.fury.io/electblake/jquery-async-navigator.svg)
 
 ### Add aync ajax page navigation on legacy platforms
 
@@ -118,7 +118,7 @@ Check [CONTRIBUTING.md](https://github.com/jquery-async-navigator/boilerplate/bl
 
 ## History
 
-Check [Releases](https://github.com/jquery-async-navigator/jquery-async-navigator/releases) for detailed changelog.
+Check [Releases](https://github.com/electblake/jquery-async-navigator/releases) for detailed changelog.
 
 ## License
 
