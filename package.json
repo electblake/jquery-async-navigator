@@ -1,6 +1,6 @@
 {
   "name": "jquery-async-navigator",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Provides async navigation to legacy browser request/loading based websites.",
   "keywords": [
     "jquery-plugin",

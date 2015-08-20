@@ -1,3 +1,11 @@
+### 0.0.8 (2015-08-20)
+
+
+#### Features
+
+* **package:** changed files a bit ([8b1626fe](https://github.com/electblake/jquery-async-navigator/commit/8b1626fe5ce411fc7791ed9864d876e99a21e213))
+
+
 ### 0.0.7 (2015-08-20)
 
 
