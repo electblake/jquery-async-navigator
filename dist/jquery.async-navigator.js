@@ -1,5 +1,5 @@
 /*
- *  jquery-async-navigator - v0.0.1
+ *  jquery-async-navigator - v0.0.2
  *  Provides async navigation to legacy browser request/loading based websites.
  *  https://github.com/electblake/jquery-async-navigator
  *
@@ -24,16 +24,11 @@
 		// Create the defaults once
 		var pluginName = "asyncNavigator",
 				defaults = {
-				propertyName: "value"
 		};
 
 		// The actual plugin constructor
 		function Plugin ( element, options ) {
-				this.element = element;
-				// jQuery has an extend method which merges the contents of two or
-				// more objects, storing the result in the first object. The first object
-				// is generally empty as we don't want to alter the default options for
-				// future instances of the plugin
+				this.element = jQuery(element);
 				this.settings = $.extend( {}, defaults, options );
 				this._defaults = defaults;
 				this._name = pluginName;
@@ -43,16 +38,45 @@
 		// Avoid Plugin.prototype conflicts
 		$.extend(Plugin.prototype, {
 				init: function () {
-						// Place initialization logic here
-						// You already have access to the DOM element and
-						// the options via the instance, e.g. this.element
-						// and this.settings
-						// you can add more functions like the one below and
-						// call them like so: this.yourOtherFunction(this.element, this.settings).
-						console.log("xD");
+					this.settings.selector = "#" + this.element.attr("id");
 				},
-				yourOtherFunction: function () {
-						// some logic
+				asyncNextPage: function(url, done) {
+					this.getNextPage(url, window._.bind(function(err, nextPage) {
+
+
+						jQuery(this.settings.selector).html(nextPage.main_content);
+						jQuery("body")[0].className = nextPage.body_class;
+						jQuery("html head title").attr("innerHTML", nextPage.page_title);
+
+						history.pushState({}, nextPage.page_title, nextPage.url);
+
+						done(err);
+					}, this));
+				},
+				getNextPage: function (url, next) {
+
+					var nextPage = {
+						url: url
+					};
+
+					$.ajax({
+						url: url,
+						success: window._.bind(function(data) {
+
+							var page = jQuery(data);
+							var main_content = page.find(this.settings.selector).attr("innerHTML");
+							if (main_content && main_content.length > 0) {
+								nextPage.page_title = page.find("html head title").attr("innerHTML");
+								nextPage.body_class = page.find("body").className;
+								nextPage.main_content = main_content;
+							}
+							next(null, nextPage);
+						}, this),
+						error: function(req, status, err) {
+							console.log("status", status);
+							next(err);
+						}
+					});
 				}
 		});
 
