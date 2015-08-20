@@ -13,5 +13,9 @@
     "async",
     "jquery-plugin"
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "jquery": "~2.1.4",
+    "lodash": "~3.10.1"
+  }
 }
