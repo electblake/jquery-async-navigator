@@ -1,5 +1,5 @@
 /*
- *  jquery-async-navigator - v0.0.7
+ *  jquery-async-navigator - v0.0.8
  *  Provides async navigation to legacy browser request/loading based websites.
  *  https://github.com/electblake/jquery-async-navigator
  *
