@@ -1,3 +1,11 @@
+### 0.0.10 (2015-08-20)
+
+
+#### Features
+
+* **navigator:** added page_title and body classes - live insert ([971b9bc7](https://github.com/electblake/jquery-async-navigator/commit/971b9bc76d2dd2ef16b562c0654e8326e0e4793d))
+
+
 ### 0.0.9 (2015-08-20)
 
 

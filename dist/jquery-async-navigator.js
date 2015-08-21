@@ -1,5 +1,5 @@
 /*
- *  jquery-async-navigator - v0.0.8
+ *  jquery-async-navigator - v0.0.9
  *  Provides async navigation to legacy browser request/loading based websites.
  *  https://github.com/electblake/jquery-async-navigator
  *
@@ -43,10 +43,17 @@
 				asyncNextPage: function(url, done) {
 					this.getNextPage(url, window._.bind(function(err, nextPage) {
 
+						// console.debug("asyncNavigator nextPage", nextPage);
 
 						jQuery(this.settings.selector).html(nextPage.main_content);
-						jQuery("body")[0].className = nextPage.body_class;
-						jQuery("html head title").attr("innerHTML", nextPage.page_title);
+
+						if (nextPage.body_class) {
+							jQuery("body")[0].className = nextPage.body_class;
+						}
+
+						if (nextPage.page_title) {
+							jQuery("html head title").attr("innerHTML", nextPage.page_title);
+						}
 
 						history.pushState({}, nextPage.page_title, nextPage.url);
 
@@ -63,14 +70,22 @@
 						url: url,
 						success: window._.bind(function(data) {
 
-							var page = jQuery(data);
+
+							data = data.replace("<body", "<div id='body'");
+							data = data.replace("</body", "</div");
+
+							var page = $(data);
+
 							var main_content = page.find(this.settings.selector).attr("innerHTML");
+
 							if (main_content && main_content.length > 0) {
-								nextPage.page_title = page.find("html head title").attr("innerHTML");
-								nextPage.body_class = page.find("body").className;
+								nextPage.page_title = page.filter("title").text();
+								nextPage.body_class = page.filter("#body").attr("class");
 								nextPage.main_content = main_content;
 							}
+
 							next(null, nextPage);
+
 						}, this),
 						error: function(req, status, err) {
 							console.log("status", status);
