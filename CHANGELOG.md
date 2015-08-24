@@ -1,3 +1,11 @@
+### 0.0.12 (2015-08-24)
+
+
+#### Features
+
+* **history:** added history and new settings.animate to fade in/out ([3e3be901](https://github.com/electblake/jquery-async-navigator/commit/3e3be9017f7f81e22e4e8413b000b5399aaff402))
+
+
 ### 0.0.11 (2015-08-24)
 
 
