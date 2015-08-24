@@ -1,5 +1,5 @@
 /*
- *  jquery-async-navigator - v0.0.10
+ *  jquery-async-navigator - v0.0.11
  *  Provides async navigation to legacy browser request/loading based websites.
  *  https://github.com/electblake/jquery-async-navigator
  *
@@ -29,7 +29,10 @@
 				defaults = {
 					includeScripts: false,
 					includeStyles: true,
-					verbose: false
+					animate: true,
+					verbose: true,
+					beforeAnimate: null,
+					afterAnimate: null
 		};
 
 		// The actual plugin constructor
@@ -45,8 +48,42 @@
 		$.extend(Plugin.prototype, {
 				init: function () {
 					this.settings.selector = "#" + this.element.attr("id");
+
+					var onPopState = window._.bind(function() {
+						try {
+							// var state = window.event.state;
+							var state = event.state.state;
+
+							if (this.settings.verbose) {
+								console.log("poped state", state);
+					    	}
+
+	    		    		if (state) {
+	    	    				this.asyncNextPage(state, function(err) {
+	    	    					if (err) {
+	    	    						console.error(err);
+	    	    					}
+	    	    				});
+
+	    		    		} else {
+	    		    			// console.log("history.go", 0);
+	    		    			// history.go(0);
+	    		    		}
+	    		    	} catch (err) {
+	    		    		if (err) {
+		    		    		console.log(err);
+	    		    		}
+	    		    	}
+
+					}, this);
+
+					window.onpopstate = onPopState;
+
 				},
 				asyncNextPage: function(url, done) {
+					if (this.settings.animate) {
+						this.element.animate({ opacity: 0 }, 1000);
+					}
 					this.getNextPage(url, window._.bind(function(err, nextPage) {
 
 						if (this.settings.verbose) {
@@ -63,17 +100,24 @@
 							jQuery("html head title").attr("innerHTML", nextPage.page_title);
 						}
 
-						// scripts
+						// load scripts
 						if (this.settings.includeScripts) {
 							jQuery("body").append(nextPage.scripts);
 						}
 
-						// styles
+						// load styles
 						if (this.settings.includeStyles) {
 							jQuery("body").append(nextPage.styles);
 						}
 
-						history.pushState({}, nextPage.page_title, nextPage.url);
+						// finishing up
+
+						// push this page into history
+						history.pushState({ state: nextPage.url }, nextPage.page_title, nextPage.url);
+
+						if (this.settings.animate) {
+							this.element.animate({ opacity: 1 }, 500);
+						}
 
 						done(err);
 					}, this));

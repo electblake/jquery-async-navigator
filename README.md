@@ -2,6 +2,8 @@
 
 ### Add aync ajax page navigation on legacy platforms
 
+Not really for user-land adoption, but great if you know how to parse code :)
+
 ## Usage
 
 1. Include jQuery:

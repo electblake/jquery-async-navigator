@@ -4,7 +4,7 @@
   "description": "Provides async navigation to legacy browser request/loading based websites.",
   "homepage": "https://github.com/electblake/jquery-async-navigator",
   "authors": [
-    "Blake E <electblake@gmail.com>"
+    "Blake E <electblake@gmail.com> (http://github.com/electblake)"
   ],
   "main": "src/jquery.async-navigator.js",
   "keywords": [
@@ -13,6 +13,13 @@
     "async",
     "jquery-plugin"
   ],
+  "ignore": [
+    "./demo",
+    "Gruntfile.js",
+    ".travis.yml",
+    ".release.json"
+  ],
+  "moduleType": "globals",
   "license": "MIT",
   "dependencies": {
     "jquery": "~2.1.4",
