@@ -1,5 +1,5 @@
 /*
- *  jquery-async-navigator - v0.0.11
+ *  jquery-async-navigator - v0.0.12
  *  Provides async navigation to legacy browser request/loading based websites.
  *  https://github.com/electblake/jquery-async-navigator
  *
@@ -30,7 +30,7 @@
 					includeScripts: false,
 					includeStyles: true,
 					animate: true,
-					verbose: true,
+					verbose: false,
 					beforeAnimate: null,
 					afterAnimate: null
 		};
@@ -59,7 +59,7 @@
 					    	}
 
 	    		    		if (state) {
-	    	    				this.asyncNextPage(state, function(err) {
+	    	    				this.asyncNextPage(state, { popstate: true }, function(err) {
 	    	    					if (err) {
 	    	    						console.error(err);
 	    	    					}
@@ -80,10 +80,19 @@
 					window.onpopstate = onPopState;
 
 				},
-				asyncNextPage: function(url, done) {
+				asyncNextPage: function(url, flags, done) {
+					
+					if (typeof flags === "function") {
+						done = flags;
+						flags = {};
+					} else if (typeof flags === "object") {
+
+					}
+
 					if (this.settings.animate) {
 						this.element.animate({ opacity: 0 }, 1000);
 					}
+
 					this.getNextPage(url, window._.bind(function(err, nextPage) {
 
 						if (this.settings.verbose) {
@@ -113,7 +122,13 @@
 						// finishing up
 
 						// push this page into history
-						history.pushState({ state: nextPage.url }, nextPage.page_title, nextPage.url);
+						if (this.settings.verbose) {
+							console.log("pushState", { state: nextPage.url });
+						}
+
+						if (!flags || !flags.popstate) {
+							history.pushState({ state: nextPage.url }, nextPage.page_title, nextPage.url);
+						}
 
 						if (this.settings.animate) {
 							this.element.animate({ opacity: 1 }, 500);
