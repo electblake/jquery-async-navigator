@@ -1,6 +1,6 @@
 {
   "name": "jquery-async-navigator",
-  "version": "0.0.13",
+  "version": "0.0.10",
   "description": "Provides async navigation to legacy browser request/loading based websites.",
   "homepage": "https://github.com/electblake/jquery-async-navigator",
   "authors": [
