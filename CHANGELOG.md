@@ -1,3 +1,11 @@
+### 0.0.13 (2015-08-24)
+
+
+#### Bug Fixes
+
+* **history:** removed dupes and loops in popstate handling ([f40d3e31](https://github.com/electblake/jquery-async-navigator/commit/f40d3e3105a8eff446d133dda5272528c82565da))
+
+
 ### 0.0.12 (2015-08-24)
 
 
