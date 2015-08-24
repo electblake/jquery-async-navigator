@@ -1,10 +1,13 @@
 /*
- *  jquery-async-navigator - v0.0.9
+ *  jquery-async-navigator - v0.0.10
  *  Provides async navigation to legacy browser request/loading based websites.
  *  https://github.com/electblake/jquery-async-navigator
  *
  *  Made by Blake E
  *  Under MIT License
+ */
+/**
+ * 
  */
 // the semi-colon before function invocation is a safety net against concatenated
 // scripts and/or other plugins which may not be closed properly.
@@ -24,6 +27,9 @@
 		// Create the defaults once
 		var pluginName = "asyncNavigator",
 				defaults = {
+					includeScripts: false,
+					includeStyles: true,
+					verbose: false
 		};
 
 		// The actual plugin constructor
@@ -43,7 +49,9 @@
 				asyncNextPage: function(url, done) {
 					this.getNextPage(url, window._.bind(function(err, nextPage) {
 
-						// console.debug("asyncNavigator nextPage", nextPage);
+						if (this.settings.verbose) {
+							console.debug("asyncNavigator nextPage", nextPage);
+						}
 
 						jQuery(this.settings.selector).html(nextPage.main_content);
 
@@ -55,12 +63,27 @@
 							jQuery("html head title").attr("innerHTML", nextPage.page_title);
 						}
 
+						// scripts
+						if (this.settings.includeScripts) {
+							jQuery("body").append(nextPage.scripts);
+						}
+
+						// styles
+						if (this.settings.includeStyles) {
+							jQuery("body").append(nextPage.styles);
+						}
+
 						history.pushState({}, nextPage.page_title, nextPage.url);
 
 						done(err);
 					}, this));
 				},
 				getNextPage: function (url, next) {
+
+					if (this.settings.verbose) {
+						console.log("getNextPage", url);
+					}
+					// console.log("next", next);
 
 					var nextPage = {
 						url: url
@@ -82,13 +105,25 @@
 								nextPage.page_title = page.filter("title").text();
 								nextPage.body_class = page.filter("#body").attr("class");
 								nextPage.main_content = main_content;
+
+								// scripts
+								if (this.settings.includeScripts) {
+									nextPage.scripts = page.filter("script").toArray();
+								}
+
+								// styles
+								if (this.settings.includeStyles) {
+									nextPage.styles = page.filter("link").toArray();
+								}
 							}
 
 							next(null, nextPage);
 
 						}, this),
 						error: function(req, status, err) {
-							console.log("status", status);
+							if (this.settings.verbose) {
+								console.log("status", status);
+							}
 							next(err);
 						}
 					});

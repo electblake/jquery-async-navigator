@@ -1,3 +1,27 @@
+### 0.0.13 (2015-08-24)
+
+
+#### Features
+
+* **assets:** added css and js asset pipe - uses `settings.includeScripts` and `settings.inclu ([26c29e46](https://github.com/electblake/jquery-async-navigator/commit/26c29e46c37635c0f5f882d2d39ff888e4256c0c))
+
+
+### 0.0.12 (2015-08-24)
+
+
+#### Features
+
+* **assets:** added css and js asset pipe - uses `settings.includeScripts` and `settings.inclu ([26c29e46](https://github.com/electblake/jquery-async-navigator/commit/26c29e46c37635c0f5f882d2d39ff888e4256c0c))
+
+
+### 0.0.11 (2015-08-24)
+
+
+#### Features
+
+* **assets:** added css and js asset pipe - uses `settings.includeScripts` and `settings.inclu ([26c29e46](https://github.com/electblake/jquery-async-navigator/commit/26c29e46c37635c0f5f882d2d39ff888e4256c0c))
+
+
 ### 0.0.10 (2015-08-20)
 
 
