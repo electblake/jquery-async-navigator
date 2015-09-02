@@ -1,3 +1,11 @@
+### 0.0.14 (2015-09-02)
+
+
+#### Features
+
+* **verbose:** added beter settings.verbose debugging ([502732d2](https://github.com/electblake/jquery-async-navigator/commit/502732d2de0e2ac0e07d7fd1d17bc0652d3a02e0))
+
+
 ### 0.0.13 (2015-08-24)
 
 
