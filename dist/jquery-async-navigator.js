@@ -1,5 +1,5 @@
 /*
- *  jquery-async-navigator - v0.0.12
+ *  jquery-async-navigator - v0.0.13
  *  Provides async navigation to legacy browser request/loading based websites.
  *  https://github.com/electblake/jquery-async-navigator
  *
@@ -7,7 +7,7 @@
  *  Under MIT License
  */
 /**
- * 
+ *
  */
 // the semi-colon before function invocation is a safety net against concatenated
 // scripts and/or other plugins which may not be closed properly.
@@ -55,7 +55,7 @@
 							var state = event.state.state;
 
 							if (this.settings.verbose) {
-								console.log("poped state", state);
+								console.debug("poped state", state);
 					    	}
 
 	    		    		if (state) {
@@ -66,12 +66,12 @@
 	    	    				});
 
 	    		    		} else {
-	    		    			// console.log("history.go", 0);
+	    		    			// console.debug("history.go", 0);
 	    		    			// history.go(0);
 	    		    		}
 	    		    	} catch (err) {
 	    		    		if (err) {
-		    		    		console.log(err);
+		    		    		console.error(err);
 	    		    		}
 	    		    	}
 
@@ -81,7 +81,7 @@
 
 				},
 				asyncNextPage: function(url, flags, done) {
-					
+
 					if (typeof flags === "function") {
 						done = flags;
 						flags = {};
@@ -96,9 +96,11 @@
 					this.getNextPage(url, window._.bind(function(err, nextPage) {
 
 						if (this.settings.verbose) {
-							console.debug("asyncNavigator nextPage", nextPage);
+							console.debug("asyncNavigator:nextPage", nextPage);
+							console.debug("asyncNavigator:selector", this.settings.selector);
 						}
 
+						// replace defined element contain html with nextPage html
 						jQuery(this.settings.selector).html(nextPage.main_content);
 
 						if (nextPage.body_class) {
@@ -123,7 +125,7 @@
 
 						// push this page into history
 						if (this.settings.verbose) {
-							console.log("pushState", { state: nextPage.url });
+							console.debug("pushState", { state: nextPage.url });
 						}
 
 						if (!flags || !flags.popstate) {
@@ -140,9 +142,9 @@
 				getNextPage: function (url, next) {
 
 					if (this.settings.verbose) {
-						console.log("getNextPage", url);
+						console.debug("getNextPage", url);
 					}
-					// console.log("next", next);
+					// console.debug("next", next);
 
 					var nextPage = {
 						url: url
@@ -181,7 +183,7 @@
 						}, this),
 						error: function(req, status, err) {
 							if (this.settings.verbose) {
-								console.log("status", status);
+								console.debug("status", status);
 							}
 							next(err);
 						}
