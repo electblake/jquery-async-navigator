@@ -1,5 +1,5 @@
 /*
- *  jquery-async-navigator - v0.0.13
+ *  jquery-async-navigator - v0.0.14
  *  Provides async navigation to legacy browser request/loading based websites.
  *  https://github.com/electblake/jquery-async-navigator
  *
@@ -27,12 +27,15 @@
 		// Create the defaults once
 		var pluginName = "asyncNavigator",
 				defaults = {
-					includeScripts: false,
-					includeStyles: true,
-					animate: true,
+					load_scripts: false, // inject script tags in nextPage
+					inline_styles: true, // inject style tags in nextPage
+					load_styles: true, // inject linked stylesheets in nextPage
+					script_inject_style: "basic", // basic or merge
+					style_inject_mode: "basic", // basic or merge
+					animate: true, // animate element content
 					verbose: false,
-					beforeAnimate: null,
-					afterAnimate: null
+					beforeAnimate: null, // hook callback
+					afterAnimate: null // hook callback
 		};
 
 		// The actual plugin constructor
@@ -43,6 +46,39 @@
 				this._name = pluginName;
 				this.init();
 		}
+
+		/**
+		 * Util Functions
+		 */
+
+		function isScriptLoaded(url) {
+		    var scripts = document.getElementsByTagName("script");
+		    for (var i = scripts.length; i--;) {
+		        if (scripts[i].src === url) {
+		        	return true;
+		        }
+		    }
+		    console.debug("script not found", url);
+		    return false;
+		}
+
+		function isStyleLoaded(url) {
+			// pretend js is loaded if url is missing
+			if (!url) {
+				return true;
+			}
+
+			var is_loaded = false;
+
+			$("link[rel='stylesheet'][type='text/css']").each(function() {
+				if ($(this).attr("href") === url) {
+		        	is_loaded = true;
+		        }
+			});
+		    // console.debug("style not found", url);
+		    return is_loaded;
+		}
+
 
 		// Avoid Plugin.prototype conflicts
 		$.extend(Plugin.prototype, {
@@ -100,25 +136,30 @@
 							console.debug("asyncNavigator:selector", this.settings.selector);
 						}
 
-						// replace defined element contain html with nextPage html
-						jQuery(this.settings.selector).html(nextPage.main_content);
-
 						if (nextPage.body_class) {
-							jQuery("body")[0].className = nextPage.body_class;
+							$("body")[0].className = nextPage.body_class;
 						}
 
 						if (nextPage.page_title) {
-							jQuery("html head title").attr("innerHTML", nextPage.page_title);
+							$("html head title").attr("innerHTML", nextPage.page_title);
 						}
 
+						// replace defined element contain html with nextPage html
+						$(this.settings.selector).html(nextPage.main_content);
+
 						// load scripts
-						if (this.settings.includeScripts) {
-							jQuery("body").append(nextPage.scripts);
+						if (this.settings.load_scripts) {
+							this.load_scripts(nextPage);
 						}
 
 						// load styles
-						if (this.settings.includeStyles) {
-							jQuery("body").append(nextPage.styles);
+						if (this.settings.load_styles) {
+							this.load_styles(nextPage);
+						}
+
+						// inline styles
+						if (this.settings.inline_styles) {
+							this.inline_styles(nextPage);
 						}
 
 						// finishing up
@@ -144,7 +185,6 @@
 					if (this.settings.verbose) {
 						console.debug("getNextPage", url);
 					}
-					// console.debug("next", next);
 
 					var nextPage = {
 						url: url
@@ -168,13 +208,18 @@
 								nextPage.main_content = main_content;
 
 								// scripts
-								if (this.settings.includeScripts) {
+								if (this.settings.load_scripts) {
 									nextPage.scripts = page.filter("script").toArray();
 								}
 
 								// styles
-								if (this.settings.includeStyles) {
+								if (this.settings.load_styles) {
 									nextPage.styles = page.filter("link").toArray();
+								}
+
+								// inline styles
+								if (this.settings.inline_styles) {
+									nextPage.inline_styles = page.filter("style[type='text/css']").toArray();
 								}
 							}
 
@@ -188,6 +233,72 @@
 							next(err);
 						}
 					});
+				},
+				/**
+				 * Asset Injection
+				 */
+				load_scripts: function(nextPage, cb) {
+
+					if (this.settings.verbose) {
+						console.debug("Discovered scripts", nextPage.scripts.length);
+					}
+
+					if (this.settings.script_inject_style && this.settings.script_inject_style === "merge") {
+						for (var i = nextPage.scripts.length - 1; i >= 0; i--) {
+
+							var inject_script = nextPage.scripts[i];
+							var inject_src = inject_script.src;
+
+							if (!isScriptLoaded(inject_src)) {}
+
+							var script = document.createElement("script");
+							script.src = inject_src;
+							if (this.settings.verbose) {
+								console.debug("..Injecting script", script);
+							}
+							$("body").append(script);
+						}
+					} else {
+						$("body").append(nextPage.scripts);
+					}
+
+					return cb ? cb(null, nextPage) : nextPage;
+				},
+				load_styles: function(nextPage, cb) {
+					if (this.settings.verbose) {
+						console.debug("Discovered styles", nextPage.styles.length);
+					}
+
+					if (this.settings.style_inject_mode && this.settings.style_inject_mode === "merge") {
+
+						for (var i = nextPage.styles.length - 1; i >= 0; i--) {
+
+							var inject_style = nextPage.styles[i];
+							var inject_href = inject_style.href;
+
+							if (!isStyleLoaded(inject_href)) {}
+
+							var style = document.createElement("link");
+							style.type = "text/css";
+							style.rel = "stylesheet";
+							style.href = inject_href;
+							if (this.settings.verbose) {
+								console.debug("..injecting style", style);
+							}
+							$("body").append(style);
+
+						}
+					} else {
+						$("body").append(nextPage.styles);
+					}
+					return cb ? cb(null, nextPage) : nextPage;
+				},
+				inline_styles: function(nextPage, cb) {
+					if (this.settings.verbose) {
+						console.debug("Discovered inline styles", nextPage.inline_styles.length);
+					}
+					$(this.settings.selector).append(nextPage.inline_styles);
+					return cb ? cb(null, nextPage) : nextPage;
 				}
 		});
 

@@ -7,7 +7,7 @@
 	"immed": true,
 	"noarg": true,
 	"onevar": true,
-	"quotmark": "double",
+	"quotmark": true,
 	"unused": true,
 	"node": true
 }

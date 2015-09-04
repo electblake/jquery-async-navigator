@@ -21,22 +21,28 @@ Not really for user-land adoption, but great if you know how to parse code :)
 3. Call the plugin:
 
 	```javascript
-	jQuery('#main-wrapper').asyncNavigator();
-	
-	// get api
-	var navigator = jQuery('#main-wrapper').data('plugin_asyncNavigator');
+	var content_wrapper = jQuery('#main-wrapper');
 
-	// now somewhere there is clicking, step in and give it the href
-	navigator.asyncNextPage(href, function(err){
-		if (err) {
-			console.error("error");
-		}
-	});
+    // sets the element to swap content with, and adds asyncNavigator api to it as data.plugin__asyncNavigator
+    content_wrapper.asyncNavigator({
+        verbose: false,
+        load_scripts: true,
+        load_styles: true,
+        script_inject_mode: 'basic',
+        style_inject_mode: 'basic',
+        inline_styles: true
 
-	// or you can just get the nextPage and handle updating the page yourself
-	navigator.getNextPage(href, function(err, nextPage) {
-		console.log('nextPage', nextPage);
-	});
+    });
+
+    // get api
+    var AsyncNav = content_wrapper.data('plugin_asyncNavigator');
+
+    // load next page with api
+    return AsyncNav.asyncNextPage(href, function(err) {
+        if (err) {
+            console.error(err);
+        }
+    });
 	```
 
 ## Structure

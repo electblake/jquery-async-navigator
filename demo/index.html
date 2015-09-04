@@ -15,8 +15,15 @@
 		</div>
 		<script>
 			$(function() {
-				jQuery('#custom-wrapper').asyncNavigator();
-				
+				jQuery('#custom-wrapper').asyncNavigator({
+                    verbose: true,
+                    load_scripts: true,
+                    load_styles: true,
+                    script_inject_mode: 'basic',
+                    style_inject_mode: 'basic',
+                    inline_styles: true
+                });
+
 				// get api
 				var navigator = jQuery('#custom-wrapper').data('plugin_asyncNavigator');
 
@@ -33,9 +40,9 @@
 					// });
 					event.preventDefault();
 				})
-				
 
-				
+
+
 			});
 		</script>
 	</body>
