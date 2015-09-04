@@ -1,3 +1,11 @@
+### 0.0.15 (2015-09-04)
+
+
+#### Features
+
+* **api:** updated api usage, readme and docs for it too ([3834a965](https://github.com/electblake/jquery-async-navigator/commit/3834a96553a38c5429fe65cc344d49eb65463306))
+
+
 ### 0.0.14 (2015-09-02)
 
 
