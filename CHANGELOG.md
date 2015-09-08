@@ -1,3 +1,11 @@
+### 0.0.16 (2015-09-08)
+
+
+#### Features
+
+* **Injection:** updated injection method for styles, and still hard-wiring js script :/ ([25cd8610](https://github.com/electblake/jquery-async-navigator/commit/25cd86102711a3b80320c9f9a8ced7b4535885c4))
+
+
 ### 0.0.15 (2015-09-04)
 
 
