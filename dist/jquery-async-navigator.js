@@ -1,5 +1,5 @@
 /*
- *  jquery-async-navigator - v0.0.14
+ *  jquery-async-navigator - v0.0.15
  *  Provides async navigation to legacy browser request/loading based websites.
  *  https://github.com/electblake/jquery-async-navigator
  *
@@ -31,7 +31,7 @@
 					inline_styles: true, // inject style tags in nextPage
 					load_styles: true, // inject linked stylesheets in nextPage
 					script_inject_style: "basic", // basic or merge
-					style_inject_mode: "basic", // basic or merge
+					style_inject_mode: "basic",
 					animate: true, // animate element content
 					verbose: false,
 					beforeAnimate: null, // hook callback
@@ -44,6 +44,12 @@
 				this.settings = $.extend( {}, defaults, options );
 				this._defaults = defaults;
 				this._name = pluginName;
+
+                if (!jQuery("body").find("#async-nav-assets")[0]) {
+                    jQuery("body").append("<div style='display:none' id='async-nav-assets'></div>");
+                }
+
+                this.inject_point = jQuery("body #async-nav-assets");
 				this.init();
 		}
 
@@ -131,6 +137,10 @@
 
 					this.getNextPage(url, window._.bind(function(err, nextPage) {
 
+                        // replace defined element contain html with nextPage html
+                        $(this.settings.selector).html(nextPage.main_content);
+                        this.inject_point.html("");
+
 						if (this.settings.verbose) {
 							console.debug("asyncNavigator:nextPage", nextPage);
 							console.debug("asyncNavigator:selector", this.settings.selector);
@@ -142,14 +152,6 @@
 
 						if (nextPage.page_title) {
 							$("html head title").attr("innerHTML", nextPage.page_title);
-						}
-
-						// replace defined element contain html with nextPage html
-						$(this.settings.selector).html(nextPage.main_content);
-
-						// load scripts
-						if (this.settings.load_scripts) {
-							this.load_scripts(nextPage);
 						}
 
 						// load styles
@@ -174,8 +176,17 @@
 						}
 
 						if (this.settings.animate) {
-							this.element.animate({ opacity: 1 }, 500);
+                            setTimeout(_.bind(function() {
+    							this.element.animate({ opacity: 1 }, 500);
+                            }, this), 500);
 						}
+
+                        // load scripts last
+                        if (this.settings.load_scripts) {
+                            setTimeout(_.bind(function() {
+                                this.load_scripts(nextPage);
+                            }, this), 50);
+                        }
 
 						done(err);
 					}, this));
@@ -243,20 +254,28 @@
 						console.debug("Discovered scripts", nextPage.scripts.length);
 					}
 
+                    var inject_src, inject_script;
+
+                    var inject_script_at_point = _.bind(function(url) {
+                        var script = document.createElement("script");
+                        script.src = url;
+                        if (this.settings.verbose) {
+                            console.debug("..Injecting script", script);
+                        }
+
+                        this.inject_point.append(script);
+
+                    }, this);
+
 					if (this.settings.script_inject_style && this.settings.script_inject_style === "merge") {
 						for (var i = nextPage.scripts.length - 1; i >= 0; i--) {
 
-							var inject_script = nextPage.scripts[i];
-							var inject_src = inject_script.src;
+							inject_script = nextPage.scripts[i];
+							inject_src = inject_script.src;
 
-							if (!isScriptLoaded(inject_src)) {}
-
-							var script = document.createElement("script");
-							script.src = inject_src;
-							if (this.settings.verbose) {
-								console.debug("..Injecting script", script);
-							}
-							$("body").append(script);
+							if (!isScriptLoaded(inject_src)) {
+                                inject_script_at_point(inject_src);
+                            }
 						}
 					} else {
 						$("body").append(nextPage.scripts);
@@ -285,7 +304,7 @@
 							if (this.settings.verbose) {
 								console.debug("..injecting style", style);
 							}
-							$("body").append(style);
+							this.inject_point.append(style);
 
 						}
 					} else {
@@ -297,7 +316,7 @@
 					if (this.settings.verbose) {
 						console.debug("Discovered inline styles", nextPage.inline_styles.length);
 					}
-					$(this.settings.selector).append(nextPage.inline_styles);
+					this.inject_point.append(nextPage.inline_styles);
 					return cb ? cb(null, nextPage) : nextPage;
 				}
 		});
