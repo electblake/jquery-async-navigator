@@ -1,3 +1,11 @@
+### 0.0.17 (2015-10-13)
+
+
+#### Features
+
+* **async:** made animations chainable, using callbacks to ensure animations finish ([c7438fcc](https://github.com/electblake/jquery-async-navigator/commit/c7438fcc5de7d3feae74186a894b403b46d0ce36))
+
+
 ### 0.0.16 (2015-09-08)
 
 
