@@ -1,3 +1,11 @@
+### 0.0.18 (2015-10-16)
+
+
+#### Features
+
+* **data_attrs:** added data_attrs feature which moves body and html data using jQuery ([0f611008](https://github.com/electblake/jquery-async-navigator/commit/0f61100861ecfc5fa95c18bd621e79d78cde3fb0))
+
+
 ### 0.0.17 (2015-10-13)
 
 
