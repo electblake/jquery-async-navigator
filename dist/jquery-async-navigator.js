@@ -1,5 +1,5 @@
 /*
- *  jquery-async-navigator - v0.0.16
+ *  jquery-async-navigator - v0.0.17
  *  Provides async navigation to legacy browser request/loading based websites.
  *  https://github.com/electblake/jquery-async-navigator
  *
@@ -30,7 +30,9 @@
 				load_scripts: false, // inject script tags in nextPage
 				inline_styles: true, // inject style tags in nextPage
 				load_styles: true, // inject linked stylesheets in nextPage
-				script_inject_style: 'basic', // basic or merge
+				data_attrs: false, // copy data- attributes on html and body tags
+                body_class: true, // copy body classes
+                script_inject_style: 'basic', // basic or merge
 				style_inject_mode: 'basic',
 				animate: true, // animate element content
 				verbose: false,
@@ -172,6 +174,14 @@
                                     $('html head title').attr('innerHTML', nextPage.page_title);
                                 }
 
+                                if (nextPage.data_attrs.body && this.settings.data_attrs) {
+                                    $('body').data(nextPage.data_attrs.body);
+                                }
+
+                                if (nextPage.data_attrs.html && this.settings.data_attrs) {
+                                    $('html').data(nextPage.data_attrs.html);
+                                }
+
                                 // load styles
                                 if (this.settings.load_styles) {
                                     this.load_styles(nextPage);
@@ -253,6 +263,10 @@
 								nextPage.page_title = page.filter('title').text();
 								nextPage.body_class = page.filter('#body').attr('class');
 								nextPage.main_content = main_content;
+                                nextPage.data_attrs = {
+                                    html: page.filter('html').data(),
+                                    body: page.filter('#body').data()
+                                };
 
 								// scripts
 								if (this.settings.load_scripts) {
