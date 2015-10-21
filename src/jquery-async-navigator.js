@@ -25,7 +25,7 @@
 				data_attrs: false, // copy data- attributes on html and body tags
                 body_class: true, // copy body classes
                 script_inject_style: 'basic', // basic or merge
-				style_inject_mode: 'basic',
+				style_inject_style: 'basic',
 				animate: true, // animate element content
 				verbose: false,
 				beforeAnimate: null, // hook callback
@@ -44,6 +44,12 @@
                 }
 
                 this.inject_point = jQuery('body #async-nav-assets');
+
+                if (this.settings.verbose) {
+                    console.log('config script_inject_style=', this.settings.script_inject_style);
+                    console.log('config style_inject_style=', this.settings.style_inject_style);
+                }
+
 				this.init();
 		}
 
@@ -58,7 +64,6 @@
 		        	return true;
 		        }
 		    }
-		    console.debug('script not found', url);
 		    return false;
 		}
 
@@ -75,7 +80,7 @@
 		        	is_loaded = true;
 		        }
 			});
-		    // console.debug('style not found', url);
+		    // console.log('style not found', url);
 		    return is_loaded;
 		}
 
@@ -91,7 +96,7 @@
 							var state = event.state.state;
 
 							if (this.settings.verbose) {
-								console.debug('poped state', state);
+								console.log('poped state', state);
 					    	}
 
 	    		    		if (state) {
@@ -102,7 +107,7 @@
 	    	    				});
 
 	    		    		} else {
-	    		    			// console.debug('history.go', 0);
+	    		    			// console.log('history.go', 0);
 	    		    			// history.go(0);
 	    		    		}
 	    		    	} catch (err) {
@@ -131,11 +136,11 @@
                             var settings = this.settings;
                             if (settings.beforeAnimate) {
                                 if (settings.verbose) {
-                                    console.debug('beforeAnimate:start');
+                                    console.log('beforeAnimate:start');
                                 }
                                 settings.beforeAnimate($(settings.selector), settings, function() {
                                     if (settings.verbose) {
-                                        console.debug('beforeAnimate:next');
+                                        console.log('beforeAnimate:done');
                                     }
                                     next();
                                 });
@@ -154,8 +159,8 @@
                                 this.inject_point.html('');
 
                                 if (this.settings.verbose) {
-                                    console.debug('asyncNavigator:nextPage', nextPage);
-                                    console.debug('asyncNavigator:selector', this.settings.selector);
+                                    console.log('asyncNavigator:nextPage', nextPage);
+                                    console.log('asyncNavigator:selector', this.settings.selector);
                                 }
 
                                 if (nextPage.body_class) {
@@ -187,12 +192,19 @@
                                 // finishing up
 
                                 // push this page into history
-                                if (this.settings.verbose) {
-                                    console.debug('pushState', { state: nextPage.url });
-                                }
-
                                 if (!flags || !flags.popstate) {
-                                    history.pushState({ state: nextPage.url }, nextPage.page_title, nextPage.url);
+                                    if (history && history.pushState) {
+                                        if (this.settings.verbose) {
+                                            console.log('pushState', { state: nextPage.url });
+                                        }
+                                        history.pushState({ state: nextPage.url }, nextPage.page_title, nextPage.url);
+                                    } else {
+                                        if (this.settings.verbose) {
+                                            console.log('pushState', 'not supported.');
+                                        }
+
+                                        window.location.hash = nextPage.url;
+                                    }
                                 }
 
                                 // load scripts last
@@ -216,9 +228,9 @@
                     window.async.series(beforeHooks, window._.bind(function() {
 
                         if (this.settings.afterAnimate) {
-                            console.debug('afterAnimate:start');
+                            console.log('afterAnimate:start');
                             this.settings.afterAnimate($(this.settings.selector), this.settings, function() {
-                                console.debug('afterAnimate:next');
+                                console.log('afterAnimate:next');
                                 done();
                             });
                         } else if (this.settings.animate) {
@@ -232,7 +244,7 @@
 				getNextPage: function (url, next) {
 
 					if (this.settings.verbose) {
-						console.debug('getNextPage', url);
+						console.log('getNextPage', url);
 					}
 
 					var nextPage = {
@@ -267,7 +279,7 @@
 
 								// styles
 								if (this.settings.load_styles) {
-									nextPage.styles = page.filter('link').toArray();
+									nextPage.styles = page.filter('link[rel="stylesheet"]').toArray();
 								}
 
 								// inline styles
@@ -281,7 +293,7 @@
 						}, this),
 						error: function(req, status, err) {
 							if (this.settings.verbose) {
-								console.debug('status', status);
+								console.log('status', status);
 							}
 							next(err);
 						}
@@ -293,7 +305,7 @@
 				load_scripts: function(nextPage, cb) {
 
 					if (this.settings.verbose) {
-						console.debug('Discovered scripts', nextPage.scripts.length);
+						console.log('scripts: discovered=', nextPage.scripts.length);
 					}
 
                     var inject_src, inject_script;
@@ -302,7 +314,7 @@
                         var script = document.createElement('script');
                         script.src = url;
                         if (this.settings.verbose) {
-                            console.debug('..Injecting script', script);
+                            console.log('scripts: ..injecting', script);
                         }
 
                         this.inject_point.append(script);
@@ -310,7 +322,7 @@
                     }, this);
 
                     if (this.settings.verbose) {
-                        console.debug('injecting scripts', this.settings.script_inject_style);
+                        console.log('scripts: inject style=', this.settings.script_inject_style);
                     }
 
 					if (this.settings.script_inject_style && this.settings.script_inject_style === 'merge') {
@@ -323,7 +335,7 @@
                                 inject_script_at_point(inject_src);
                             } else {
                                 if (this.settings.verbose) {
-                                    console.debug('skipped', inject_script_at_point);
+                                    // console.log('scripts: skipped=', inject_src);
                                 }
                             }
 						}
@@ -335,26 +347,37 @@
 				},
 				load_styles: function(nextPage, cb) {
 					if (this.settings.verbose) {
-						console.debug('Discovered styles', nextPage.styles.length);
+						console.log('styles: discovered=', nextPage.styles.length);
 					}
 
-					if (this.settings.style_inject_mode && this.settings.style_inject_mode === 'merge') {
+					if (this.settings.style_inject_style && this.settings.style_inject_style === 'merge') {
 
 						for (var i = nextPage.styles.length - 1; i >= 0; i--) {
 
 							var inject_style = nextPage.styles[i];
 							var inject_href = inject_style.href;
 
-							if (!isStyleLoaded(inject_href)) {}
+							if (!isStyleLoaded(inject_href)) {
 
-							var style = document.createElement('link');
-							style.type = 'text/css';
-							style.rel = 'stylesheet';
-							style.href = inject_href;
-							if (this.settings.verbose) {
-								console.debug('..injecting style', style);
-							}
-							this.inject_point.append(style);
+                                // @feature ie9 support;
+                                if (window.document.createStyleSheet) {
+                                    window.document.createStyleSheet(inject_href);
+                                } else {
+
+                                    var style = document.createElement('link');
+                                    style.type = 'text/css';
+                                    style.rel = 'stylesheet';
+                                    style.href = inject_href;
+                                    if (this.settings.verbose) {
+                                        console.log('styles: ..injecting ', style);
+                                    }
+                                    this.inject_point.append(style);
+                                }
+                            } else {
+                                if (this.settings.verbose) {
+                                    // console.log('styles: skipped=', inject_href);
+                                }
+                            }
 
 						}
 					} else {
@@ -364,7 +387,7 @@
 				},
 				inline_styles: function(nextPage, cb) {
 					if (this.settings.verbose) {
-						console.debug('Discovered inline styles', nextPage.inline_styles.length);
+						console.log('inline: discovered=', nextPage.inline_styles);
 					}
 					this.inject_point.append(nextPage.inline_styles);
 					return cb ? cb(null, nextPage) : nextPage;
