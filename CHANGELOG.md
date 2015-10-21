@@ -1,3 +1,11 @@
+### 0.0.19 (2015-10-21)
+
+
+#### Features
+
+* **IE9:** started ie9 support, and optimized css merge insert etc ([3b432442](https://github.com/electblake/jquery-async-navigator/commit/3b4324423c852bef8e9ddf8718882df5fe996887))
+
+
 ### 0.0.18 (2015-10-16)
 
 
