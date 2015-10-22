@@ -314,7 +314,7 @@
                         var script = document.createElement('script');
                         script.src = url;
                         if (this.settings.verbose) {
-                            console.log('scripts: ..injecting', script);
+                            console.log('scripts: ..inject=', script.src);
                         }
 
                         this.inject_point.append(script);
@@ -359,17 +359,28 @@
 
 							if (!isStyleLoaded(inject_href)) {
 
+                                var style;
                                 // @feature ie9 support;
                                 if (window.document.createStyleSheet) {
-                                    window.document.createStyleSheet(inject_href);
+                                    if (this.settings.verbose) {
+                                        console.log('styles: ie, inject <head>=', inject_href);
+                                    }
+                                    // window.document.createStyleSheet(inject_href);
+
+                                    style = document.createElement('link');
+                                    style.type = 'text/css';
+                                    style.rel = 'stylesheet';
+                                    style.href = inject_href;
+                                    $('head').append(style);
+
                                 } else {
 
-                                    var style = document.createElement('link');
+                                    style = document.createElement('link');
                                     style.type = 'text/css';
                                     style.rel = 'stylesheet';
                                     style.href = inject_href;
                                     if (this.settings.verbose) {
-                                        console.log('styles: ..injecting ', style);
+                                        console.log('styles: inject=', style.href);
                                     }
                                     this.inject_point.append(style);
                                 }
@@ -387,9 +398,55 @@
 				},
 				inline_styles: function(nextPage, cb) {
 					if (this.settings.verbose) {
-						console.log('inline: discovered=', nextPage.inline_styles);
+						console.log('inline: discovered=', nextPage.inline_styles.length);
 					}
-					this.inject_point.append(nextPage.inline_styles);
+                    // @feature ie9 support;
+                    if (window.document.createStyleSheet) {
+                        if (nextPage.inline_styles) {
+
+                            for (var i = nextPage.inline_styles.length - 1; i >= 0; i--) {
+
+                                // var inline_id = 'async_inline_styles_'+i;
+                                // if (!$('#' + inline_id)) {
+                                //     $('<style id="'+inline_id+'"></style>').appendTo('head');
+                                // }
+
+                                var styleElem = nextPage.inline_styles[i];
+                                var rules = $(styleElem).attr('innerHTML');
+
+                                // // remove CDATA?
+                                // rules = rules.replace('<!--/*--><![CDATA[/*><!--*/', '');
+                                // rules = rules.replace('/*]]>*/-->', '');
+                                // rules = rules.trim();
+
+                                if (this.settings.verbose) {
+                                    console.log('inline: inject=', rules.substr(0, 100));
+                                }
+
+                                var $styleElement = $('<style />', {
+                                    type: 'text/css',
+                                    text: rules
+                                });
+
+                                $('head').append($styleElement);
+
+                                // $('<style id="'+inline_id+'"></style>').prop('styleSheet').cssText = rules;
+
+                                // var style = document.createElement('style');
+                                // // style.rel = 'stylesheet';
+                                // style.type = 'text/css';
+                                // style.media = 'all';
+                                // document.getElementsByTagName('head')[0].appendChild(style);
+
+                                // style.innerHTML = rules;
+
+                                // $('<style type="text/css">' + rules + '</style>').appendTo('head');
+
+                            }
+                        }
+                    } else {
+    					this.inject_point.append(nextPage.inline_styles);
+                    }
 					return cb ? cb(null, nextPage) : nextPage;
 				}
 		});
