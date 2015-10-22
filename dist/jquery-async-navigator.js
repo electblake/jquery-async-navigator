@@ -1,5 +1,5 @@
 /*
- *  jquery-async-navigator - v0.0.19
+ *  jquery-async-navigator - v0.0.20
  *  Provides async navigation to legacy browser request/loading based websites.
  *  https://github.com/electblake/jquery-async-navigator
  *
@@ -412,40 +412,51 @@
                     if (window.document.createStyleSheet) {
                         if (nextPage.inline_styles) {
 
-                            for (var i = nextPage.inline_styles.length - 1; i >= 0; i--) {
+                            var inline_inject_styles_IE9 = function (rule) {
+                                console.log('inline_inject_styles_IE9');
+                                $('<div />', {
+                                    html: '&shy;<style>' + rule + '</style>'
+                                }).appendTo('body');
+                            };
 
-                                // var inline_id = 'async_inline_styles_'+i;
-                                // if (!$('#' + inline_id)) {
-                                //     $('<style id="'+inline_id+'"></style>').appendTo('head');
-                                // }
+
+                            for (var i = nextPage.inline_styles.length - 1; i >= 0; i--) {
 
                                 var styleElem = nextPage.inline_styles[i];
                                 var rules = $(styleElem).attr('innerHTML');
 
                                 // // remove CDATA?
-                                // rules = rules.replace('<!--/*--><![CDATA[/*><!--*/', '');
-                                // rules = rules.replace('/*]]>*/-->', '');
-                                // rules = rules.trim();
+                                rules = rules.replace('<!--/*--><![CDATA[/*><!--*/', '');
+                                rules = rules.replace('/*]]>*/-->', '');
+                                rules = rules.trim();
 
                                 if (this.settings.verbose) {
                                     console.log('inline: inject=', rules.substr(0, 100));
                                 }
 
-                                var $styleElement = $('<style />', {
-                                    type: 'text/css',
-                                    text: rules
-                                });
+                                inline_inject_styles_IE9(rules);
 
-                                $('head').append($styleElement);
 
-                                // $('<style id="'+inline_id+'"></style>').prop('styleSheet').cssText = rules;
+                                // var inline_id = 'async_inline_styles_'+i;
+                                // if (!$('#' + inline_id)) {
+                                //     $('<style id="'+inline_id+'"></style>').appendTo('head');
+                                // }
+                                // $('<style id="'+inline_id+'"></style>').attr('innerHTML', rules);
+
+
+                                // console.log('head append method');
+                                // var $styleElement = $('<style />', {
+                                //     type: 'text/css',
+                                //     text: rules
+                                // });
+                                // $('head').append($styleElement);
+
 
                                 // var style = document.createElement('style');
                                 // // style.rel = 'stylesheet';
                                 // style.type = 'text/css';
                                 // style.media = 'all';
                                 // document.getElementsByTagName('head')[0].appendChild(style);
-
                                 // style.innerHTML = rules;
 
                                 // $('<style type="text/css">' + rules + '</style>').appendTo('head');
