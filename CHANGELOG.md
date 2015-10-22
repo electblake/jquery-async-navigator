@@ -1,3 +1,11 @@
+### 0.0.21 (2015-10-22)
+
+
+#### Bug Fixes
+
+* **IE9:** another IE9 attempt for inline styles, and clean up previous methods ([2f3b997f](https://github.com/electblake/jquery-async-navigator/commit/2f3b997f4425c2263b8c95827bc5a65388f629cf))
+
+
 ### 0.0.20 (2015-10-21)
 
 
