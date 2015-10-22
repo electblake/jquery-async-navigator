@@ -1,3 +1,11 @@
+### 0.0.20 (2015-10-21)
+
+
+#### Features
+
+* **IE9:** update way styles are injected (both file and inline) ([967f3b28](https://github.com/electblake/jquery-async-navigator/commit/967f3b28d6e9cc936986ffd768b8247d1231db46))
+
+
 ### 0.0.19 (2015-10-21)
 
 
