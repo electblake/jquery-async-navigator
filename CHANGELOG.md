@@ -1,3 +1,11 @@
+### 0.0.22 (2015-10-27)
+
+
+#### Bug Fixes
+
+* **Styles:** added cleanup_styles option, and code cleanup ([777b7d92](https://github.com/electblake/jquery-async-navigator/commit/777b7d929800cbb449560aa451a8a9c8a7e5f77b))
+
+
 ### 0.0.21 (2015-10-22)
 
 
