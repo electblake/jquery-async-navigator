@@ -26,6 +26,7 @@
                 body_class: true, // copy body classes
                 script_inject_style: 'basic', // basic or merge
 				style_inject_style: 'basic',
+                cleanup_styles: false,
 				animate: true, // animate element content
 				verbose: false,
 				beforeAnimate: null, // hook callback
@@ -352,6 +353,14 @@
 
 					if (this.settings.style_inject_style && this.settings.style_inject_style === 'merge') {
 
+                        if (this.settings.cleanup_styles) {
+                                var asyncStyles = $('link.async-injected');
+                                asyncStyles.remove();
+                            if (this.settings.verbose) {
+                                console.log('cleaned up', asyncStyles.length);
+                            }
+                        }
+
 						for (var i = nextPage.styles.length - 1; i >= 0; i--) {
 
 							var inject_style = nextPage.styles[i];
@@ -371,6 +380,7 @@
                                     style.type = 'text/css';
                                     style.rel = 'stylesheet';
                                     style.href = inject_href;
+                                    style.class = 'async-injected';
                                     $('head').append(style);
 
                                 } else {
@@ -402,6 +412,7 @@
 					}
                     // @feature ie9 support;
                     if (window.document.createStyleSheet) {
+                        console.log('document.createStyleSheet detected', 'IE support is experimental!');
                         if (nextPage.inline_styles) {
 
                             var inline_inject_styles_IE9 = function (rule) {
