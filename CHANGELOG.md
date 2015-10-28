@@ -1,3 +1,11 @@
+### 0.0.23 (2015-10-28)
+
+
+#### Bug Fixes
+
+* **Navigation:** cancel previous ajax request on multiple clicks ([587573c3](https://github.com/electblake/jquery-async-navigator/commit/587573c365328190f243be6a1ec4b39deae04734))
+
+
 ### 0.0.22 (2015-10-27)
 
 
