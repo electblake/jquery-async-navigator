@@ -51,6 +51,8 @@
                     console.log('config style_inject_style=', this.settings.style_inject_style);
                 }
 
+                this.current_job = null;
+
 				this.init();
 		}
 
@@ -123,6 +125,10 @@
 
 				},
 				asyncNextPage: function(url, flags, done) {
+
+                    if (this.current_job) {
+                        this.current_job.abort();
+                    }
 
 					if (typeof flags === 'function') {
 						done = flags;
@@ -252,7 +258,7 @@
 						url: url
 					};
 
-					$.ajax({
+					this.current_job = $.ajax({
 						url: url,
 						success: window._.bind(function(data) {
 
