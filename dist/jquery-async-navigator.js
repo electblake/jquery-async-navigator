@@ -1,5 +1,5 @@
 /*
- *  jquery-async-navigator - v0.0.22
+ *  jquery-async-navigator - v0.0.23
  *  Provides async navigation to legacy browser request/loading based websites.
  *  https://github.com/electblake/jquery-async-navigator
  *
@@ -145,10 +145,13 @@
 
 					}
 
-                    var beforeHooks = [
-                        _.bind(function(next) {
+                    var __settings = this.settings;
+                    var __this = this;
 
-                            var settings = this.settings;
+                    var beforeHooks = [
+                        function(next) {
+
+                            var settings = __settings;
                             if (settings.beforeAnimate) {
                                 if (settings.verbose) {
                                     console.log('beforeAnimate:start');
@@ -160,22 +163,22 @@
                                     next();
                                 });
                             } else if (settings.animate) {
-                                this.element.animate({ opacity: 0 }, 1000, 'ease', function() {
+                                __this.element.animate({ opacity: 0 }, 1000, 'ease', function() {
                                     next();
                                 });
                             }
-                        }, this),
-                        _.bind(function(next) {
+                        },
+                        function(next) {
 
                             var pageCallback = function(err, nextPage) {
 
                                 // replace defined element contain html with nextPage html
-                                $(this.settings.selector).html(nextPage.main_content);
-                                this.inject_point.html('');
+                                $(__settings.selector).html(nextPage.main_content);
+                                __this.inject_point.html('');
 
-                                if (this.settings.verbose) {
+                                if (__settings.verbose) {
                                     console.log('asyncNavigator:nextPage', nextPage);
-                                    console.log('asyncNavigator:selector', this.settings.selector);
+                                    console.log('asyncNavigator:selector', __settings.selector);
                                 }
 
                                 if (nextPage.body_class) {
@@ -186,22 +189,22 @@
                                     $('html head title').attr('innerHTML', nextPage.page_title);
                                 }
 
-                                if (nextPage.data_attrs.body && this.settings.data_attrs) {
+                                if (nextPage.data_attrs.body && __settings.data_attrs) {
                                     $('body').data(nextPage.data_attrs.body);
                                 }
 
-                                if (nextPage.data_attrs.html && this.settings.data_attrs) {
+                                if (nextPage.data_attrs.html && __settings.data_attrs) {
                                     $('html').data(nextPage.data_attrs.html);
                                 }
 
                                 // load styles
-                                if (this.settings.load_styles) {
-                                    this.load_styles(nextPage);
+                                if (__settings.load_styles) {
+                                    __this.load_styles(nextPage);
                                 }
 
                                 // inline styles
-                                if (this.settings.inline_styles) {
-                                    this.inline_styles(nextPage);
+                                if (__settings.inline_styles) {
+                                    __this.inline_styles(nextPage);
                                 }
 
                                 // finishing up
@@ -209,12 +212,12 @@
                                 // push this page into history
                                 if (!flags || !flags.popstate) {
                                     if (history && history.pushState) {
-                                        if (this.settings.verbose) {
+                                        if (__settings.verbose) {
                                             console.log('pushState', { state: nextPage.url });
                                         }
                                         history.pushState({ state: nextPage.url }, nextPage.page_title, nextPage.url);
                                     } else {
-                                        if (this.settings.verbose) {
+                                        if (__settings.verbose) {
                                             console.log('pushState', 'not supported.');
                                         }
 
@@ -223,8 +226,8 @@
                                 }
 
                                 // load scripts last
-                                if (this.settings.load_scripts) {
-                                    this.load_scripts(nextPage);
+                                if (__settings.load_scripts) {
+                                    __this.load_scripts(nextPage);
                                 }
 
                                 $(document).ready(function() {
@@ -233,28 +236,28 @@
 
                             };
 
-                            this.getNextPage(url, window._.bind(pageCallback, this));
+                            __this.getNextPage(url, pageCallback);
 
-                        }, this)
+                        }
                     ];
 
                     // var afterHooks = [];
 
-                    window.async.series(beforeHooks, window._.bind(function() {
+                    window.async.auto(beforeHooks, function() {
 
-                        if (this.settings.afterAnimate) {
+                        if (__settings.afterAnimate) {
                             console.log('afterAnimate:start');
-                            this.settings.afterAnimate($(this.settings.selector), this.settings, function() {
+                            __settings.afterAnimate($(__settings.selector), __settings, function() {
                                 console.log('afterAnimate:next');
                                 done();
                             });
-                        } else if (this.settings.animate) {
-                            this.element.animate({ opacity: 1 }, 500, 'swing', function() {
+                        } else if (__settings.animate) {
+                            __this.element.animate({ opacity: 1 }, 500, 'swing', function() {
                                 done();
                             });
                         }
 
-                    }, this));
+                    });
 				},
 				getNextPage: function (url, next) {
 
