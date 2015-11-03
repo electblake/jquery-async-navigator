@@ -1,3 +1,11 @@
+### 0.0.24 (2015-11-02)
+
+
+#### Features
+
+* **Refactor:** start use of __config and __settings to avoid so much lodash binding ([274e5bef](https://github.com/electblake/jquery-async-navigator/commit/274e5bef5225aaab20e252650a7505a7f971ed55))
+
+
 ### 0.0.23 (2015-10-28)
 
 
