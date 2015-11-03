@@ -1,3 +1,11 @@
+### 0.0.25 (2015-11-03)
+
+
+#### Bug Fixes
+
+* **Rendering:** run beforeAnimate hooks as async.series, to render next pages much closer to des ([b0ba164a](https://github.com/electblake/jquery-async-navigator/commit/b0ba164a18e2a539b88850be3537a1fbb09c441c))
+
+
 ### 0.0.24 (2015-11-02)
 
 
