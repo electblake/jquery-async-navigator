@@ -142,7 +142,6 @@
 
                     var beforeHooks = [
                         function(next) {
-
                             var settings = __settings;
                             if (settings.beforeAnimate) {
                                 if (settings.verbose) {
@@ -164,14 +163,15 @@
 
                             var pageCallback = function(err, nextPage) {
 
-                                // replace defined element contain html with nextPage html
-                                $(__settings.selector).html(nextPage.main_content);
-                                __this.inject_point.html('');
-
                                 if (__settings.verbose) {
                                     console.log('asyncNavigator:nextPage', nextPage);
                                     console.log('asyncNavigator:selector', __settings.selector);
                                 }
+
+                                // replace defined element contain html with nextPage html
+                                $(__settings.selector).html(nextPage.main_content);
+                                // remove previous injections
+                                __this.inject_point.html('');
 
                                 if (nextPage.body_class) {
                                     $('body')[0].className = nextPage.body_class;
@@ -199,8 +199,6 @@
                                     __this.inline_styles(nextPage);
                                 }
 
-                                // finishing up
-
                                 // push this page into history
                                 if (!flags || !flags.popstate) {
                                     if (history && history.pushState) {
@@ -219,12 +217,16 @@
 
                                 // load scripts last
                                 if (__settings.load_scripts) {
-                                    __this.load_scripts(nextPage);
+                                    __this.load_scripts(nextPage, function() {
+                                        $(document).ready(function() {
+                                            next();
+                                        });
+                                    });
+                                } else {
+                                    $(document).ready(function() {
+                                        next();
+                                    });
                                 }
-
-                                $(document).ready(function() {
-                                    next();
-                                });
 
                             };
 
@@ -235,7 +237,7 @@
 
                     // var afterHooks = [];
 
-                    window.async.auto(beforeHooks, function() {
+                    window.async.series(beforeHooks, function() {
 
                         if (__settings.afterAnimate) {
                             console.log('afterAnimate:start');
