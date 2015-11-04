@@ -1,3 +1,11 @@
+### 0.0.31 (2015-11-04)
+
+
+#### Bug Fixes
+
+* **Asset Injection:** fix for inline style injection ([d295da8d](https://github.com/electblake/jquery-async-navigator/commit/d295da8de7abf27bee02c1a9065cdd93a59de1b5))
+
+
 ### 0.0.30 (2015-11-04)
 
 
