@@ -1,5 +1,5 @@
 /*
- *  jquery-async-navigator - v0.0.24
+ *  jquery-async-navigator - v0.0.25
  *  Provides async navigation to legacy browser request/loading based websites.
  *  https://github.com/electblake/jquery-async-navigator
  *
@@ -101,35 +101,42 @@
 				init: function () {
 					this.settings.selector = '#' + this.element.attr('id');
 
-					var onPopState = window._.bind(function() {
-						try {
-							// var state = window.event.state;
-							var state = event.state.state;
+                    // attach async popstate
+					if ($('html').hasClass('history')) {
+                        var onPopState = window._.bind(function() {
+    						try {
+                                if (window.event) {
+        							var state = window.event.state;
+                                    if (state && state.state) {
+                                        state = state.state;
+                                    }
 
-							if (this.settings.verbose) {
-								console.log('poped state', state);
-					    	}
+        							if (this.settings.verbose) {
+        								console.log('poped state', state);
+        					    	}
 
-	    		    		if (state) {
-	    	    				this.asyncNextPage(state, { popstate: true }, function(err) {
-	    	    					if (err) {
-	    	    						console.error(err);
-	    	    					}
-	    	    				});
+        	    		    		if (state) {
+        	    	    				this.asyncNextPage(state, { popstate: true }, function(err) {
+        	    	    					if (err) {
+        	    	    						console.error(err);
+        	    	    					}
+        	    	    				});
 
-	    		    		} else {
-	    		    			// console.log('history.go', 0);
-	    		    			// history.go(0);
-	    		    		}
-	    		    	} catch (err) {
-	    		    		if (err) {
-		    		    		console.error(err);
-	    		    		}
-	    		    	}
+        	    		    		} else {
+        	    		    			// console.log('history.go', 0);
+        	    		    			// history.go(0);
+        	    		    		}
+                                }
+    	    		    	} catch (err) {
+    	    		    		if (err) {
+    		    		    		console.error(err);
+    	    		    		}
+    	    		    	}
 
-					}, this);
+    					}, this);
 
-					window.onpopstate = onPopState;
+    					window.onpopstate = onPopState;
+                    }
 
 				},
 				asyncNextPage: function(url, flags, done) {
@@ -179,7 +186,7 @@
                                 // replace defined element contain html with nextPage html
                                 $(__settings.selector).html(nextPage.main_content);
                                 // remove previous injections
-                                __this.inject_point.html('');
+                                __this.inject_point.empty();
 
                                 if (nextPage.body_class) {
                                     $('body')[0].className = nextPage.body_class;
@@ -360,7 +367,7 @@
                             }
 						}
 					} else {
-						$('body').append(nextPage.scripts);
+						this.inject_point.append(nextPage.scripts);
 					}
 
 					return cb ? cb(null, nextPage) : nextPage;
