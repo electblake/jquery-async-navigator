@@ -1,5 +1,5 @@
 /*
- *  jquery-async-navigator - v0.0.25
+ *  jquery-async-navigator - v0.0.26
  *  Provides async navigation to legacy browser request/loading based websites.
  *  https://github.com/electblake/jquery-async-navigator
  *
@@ -11,7 +11,7 @@
  */
 // the semi-colon before function invocation is a safety net against concatenated
 // scripts and/or other plugins which may not be closed properly.
-;(function ( $, window, document, undefined ) {
+;(function ( $, Modernizr, window, document, undefined ) {
 
 	'use strict';
 
@@ -186,7 +186,7 @@
                                 // replace defined element contain html with nextPage html
                                 $(__settings.selector).html(nextPage.main_content);
                                 // remove previous injections
-                                __this.inject_point.empty();
+                                var previous_async_assets = __this.inject_point.children();
 
                                 if (nextPage.body_class) {
                                     $('body')[0].className = nextPage.body_class;
@@ -234,6 +234,7 @@
                                 if (__settings.load_scripts) {
                                     __this.load_scripts(nextPage, function() {
                                         $(document).ready(function() {
+                                            previous_async_assets.remove();
                                             next();
                                         });
                                     });
@@ -436,9 +437,10 @@
 					if (this.settings.verbose) {
 						console.log('inline: discovered=', nextPage.inline_styles.length);
 					}
-                    // @feature ie9 support;
-                    if (window.document.createStyleSheet) {
-                        console.log('document.createStyleSheet detected', 'IE support is experimental!');
+
+                    // @feature ie support;
+                    if ($('body').hasClass('ie')) {
+                        console.log('IE detected', 'IE support is experimental.');
                         if (nextPage.inline_styles) {
 
                             var inline_inject_styles_IE9 = function (rule) {
@@ -463,7 +465,19 @@
                                     console.log('inline: inject=', rules.substr(0, 100));
                                 }
 
-                                inline_inject_styles_IE9(rules);
+                                // ie9
+                                if (window.document.createStyleSheet)
+                                {
+                                    inline_inject_styles_IE9(rules);
+                                }
+                                else if ($('body').hasClass('ie11'))
+                                {
+                                    var $styleElement = $('<style />', {
+                                        type: 'text/css',
+                                        text: rules
+                                    });
+                                    this.inject_point.append($styleElement);
+                                }
 
 
                                 // var inline_id = 'async_inline_styles_'+i;
@@ -493,6 +507,7 @@
                             }
                         }
                     } else {
+                        // all other modern browsers
     					this.inject_point.append(nextPage.inline_styles);
                     }
 					return cb ? cb(null, nextPage) : nextPage;
@@ -509,4 +524,4 @@
 				});
 		};
 
-})( jQuery, window, document );
+})( jQuery, Modernizr, window, document);
