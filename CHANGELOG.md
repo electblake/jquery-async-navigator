@@ -1,3 +1,11 @@
+### 0.0.27 (2015-11-04)
+
+
+#### Bug Fixes
+
+* **Asset Injection:** remove previous async assets only after new page loaded ([29d1b68c](https://github.com/electblake/jquery-async-navigator/commit/29d1b68cf9cb2e8ae58629690f955672b642aad2))
+
+
 ### 0.0.26 (2015-11-04)
 
 
