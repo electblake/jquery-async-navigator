@@ -1,5 +1,5 @@
 /*
- *  jquery-async-navigator - v0.0.28
+ *  jquery-async-navigator - v0.0.29
  *  Provides async navigation to legacy browser request/loading based websites.
  *  https://github.com/electblake/jquery-async-navigator
  *
@@ -536,7 +536,7 @@
                             if (__settings.verbose) {
                                 console.log('inline: inject=', ele_string.substr(0, 100));
                             }
-                            this.inject_point.append();
+                            this.inject_point.append(ele_string);
                         }
 
                         // var $style = $('<style />', {

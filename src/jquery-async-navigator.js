@@ -528,7 +528,7 @@
                             if (__settings.verbose) {
                                 console.log('inline: inject=', ele_string.substr(0, 100));
                             }
-                            this.inject_point.append();
+                            this.inject_point.append(ele_string);
                         }
 
                         // var $style = $('<style />', {
