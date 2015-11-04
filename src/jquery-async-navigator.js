@@ -118,7 +118,7 @@
                                         if (this.settings.verbose) {
                                             console.log('could not find popstate in event, using history.go(-1)', event);
                                         }
-        	    		    			history.go(-1);
+        	    		    			// history.go(-1);
         	    		    		}
                                 }
     	    		    	} catch (err) {

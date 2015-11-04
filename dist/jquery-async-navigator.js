@@ -1,5 +1,5 @@
 /*
- *  jquery-async-navigator - v0.0.30
+ *  jquery-async-navigator - v0.0.31
  *  Provides async navigation to legacy browser request/loading based websites.
  *  https://github.com/electblake/jquery-async-navigator
  *
@@ -126,7 +126,7 @@
                                         if (this.settings.verbose) {
                                             console.log('could not find popstate in event, using history.go(-1)', event);
                                         }
-        	    		    			history.go(-1);
+        	    		    			// history.go(-1);
         	    		    		}
                                 }
     	    		    	} catch (err) {
