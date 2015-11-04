@@ -506,25 +506,25 @@
                         }
                     } else {
                         // all other modern browsers
-                        // var lines;
+                        var lines;
                         if (__settings.verbose) {
                             // console.log('inline:', '');
                         }
                         for (var j = nextPage.inline_styles.length - 1; j >= 0; j--) {
 
-                            var $ele = $(nextPage.inline_styles[j]);
-                            // lines = $(ele).attr('innerHTML');
+                            var ele = $(nextPage.inline_styles[j]);
+                            lines = $(ele).attr('innerHTML');
 
-                            // // remove CDATA?
-                            // lines = lines.replace('<!--/*--><![CDATA[/*><!--*/', '');
-                            // lines = lines.replace('/*]]>*/-->', '');
-                            // lines = lines.trim();
-                            // lines = lines;
+                            // remove CDATA?
+                            lines = lines.replace('<!--/*--><![CDATA[/*><!--*/', '');
+                            lines = lines.replace('/*]]>*/-->', '');
+                            lines = lines.trim();
+                            lines = lines;
 
                             // if (__settings.verbose) {
                             //     console.log('inline: inject=', lines.substr(0, 100));
                             // }
-                            var ele_string = $ele.wrap('<noscript></noscript>').html();
+                            var ele_string = '<style>'+lines+'</style>';
                             if (__settings.verbose) {
                                 console.log('inline: inject=', ele_string.substr(0, 100));
                             }
