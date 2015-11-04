@@ -1,3 +1,11 @@
+### 0.0.32 (2015-11-04)
+
+
+#### Bug Fixes
+
+* **History:** removed default go(-1) until popstate validation is there ([89969bd6](https://github.com/electblake/jquery-async-navigator/commit/89969bd63f806a54db9515450d8ca1690bc0ddb9))
+
+
 ### 0.0.31 (2015-11-04)
 
 
