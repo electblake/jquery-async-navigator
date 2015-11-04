@@ -97,17 +97,17 @@
 					if ($('html').hasClass('history')) {
                         var onPopState = window._.bind(function() {
     						try {
-                                if (window.event) {
-        							var state = window.event.state;
-                                    if (state && state.state) {
-                                        state = state.state;
+                                if (event) {
+                                    var state;
+                                    console.log('event.state', event.state);
+                                    if (event.state && event.state.state) {
+                                        state = event.state.state;
                                     }
 
-        							if (this.settings.verbose) {
-        								console.log('poped state', state);
-        					    	}
-
         	    		    		if (state) {
+                                        if (this.settings.verbose) {
+                                            console.log('poped state', state);
+                                        }
         	    	    				this.asyncNextPage(state, { popstate: true }, function(err) {
         	    	    					if (err) {
         	    	    						console.error(err);
@@ -115,8 +115,10 @@
         	    	    				});
 
         	    		    		} else {
-        	    		    			// console.log('history.go', 0);
-        	    		    			// history.go(0);
+                                        if (this.settings.verbose) {
+                                            console.log('could not find popstate in event, using history.go(-1)', event);
+                                        }
+        	    		    			history.go(-1);
         	    		    		}
                                 }
     	    		    	} catch (err) {
