@@ -1,3 +1,11 @@
+### 0.0.29 (2015-11-04)
+
+
+#### Features
+
+* **Asset Injection:** updated inline css injection to use <noscript> to avoid render jitter ([338f5df8](https://github.com/electblake/jquery-async-navigator/commit/338f5df802126d6725afdc6dd4d2216634a4cd31))
+
+
 ### 0.0.28 (2015-11-04)
 
 
