@@ -1,3 +1,11 @@
+### 0.0.28 (2015-11-04)
+
+
+#### Bug Fixes
+
+* **History:** fallback to history.go(-1) and better event.state handling ([db890467](https://github.com/electblake/jquery-async-navigator/commit/db89046757562a5a621f94672186e6bf8fac94db))
+
+
 ### 0.0.27 (2015-11-04)
 
 
