@@ -1,5 +1,5 @@
 /*
- *  jquery-async-navigator - v0.0.27
+ *  jquery-async-navigator - v0.0.28
  *  Provides async navigation to legacy browser request/loading based websites.
  *  https://github.com/electblake/jquery-async-navigator
  *
@@ -157,6 +157,8 @@
                     var __settings = this.settings;
                     var __this = this;
 
+                    var previous_async_assets = [];
+
                     var beforeHooks = [
                         function(next) {
                             var settings = __settings;
@@ -188,7 +190,7 @@
                                 // replace defined element contain html with nextPage html
                                 $(__settings.selector).html(nextPage.main_content);
                                 // remove previous injections
-                                var previous_async_assets = __this.inject_point.children();
+                                previous_async_assets = __this.inject_point.children();
 
                                 if (nextPage.body_class) {
                                     $('body')[0].className = nextPage.body_class;
@@ -236,7 +238,6 @@
                                 if (__settings.load_scripts) {
                                     __this.load_scripts(nextPage, function() {
                                         $(document).ready(function() {
-                                            previous_async_assets.remove();
                                             next();
                                         });
                                     });
@@ -261,6 +262,7 @@
                             console.log('afterAnimate:start');
                             __settings.afterAnimate($(__settings.selector), __settings, function() {
                                 console.log('afterAnimate:next');
+                                previous_async_assets.remove();
                                 done();
                             });
                         } else if (__settings.animate) {
@@ -436,13 +438,15 @@
 					return cb ? cb(null, nextPage) : nextPage;
 				},
 				inline_styles: function(nextPage, cb) {
+
+                    var __settings = this.settings;
 					if (this.settings.verbose) {
 						console.log('inline: discovered=', nextPage.inline_styles.length);
 					}
 
                     // @feature ie support;
                     if ($('body').hasClass('ie')) {
-                        console.log('IE detected', 'IE support is experimental.');
+                        console.log('inline: IE detected', 'IE support is experimental.');
                         if (nextPage.inline_styles) {
 
                             var inline_inject_styles_IE9 = function (rule) {
@@ -510,7 +514,45 @@
                         }
                     } else {
                         // all other modern browsers
-    					this.inject_point.append(nextPage.inline_styles);
+                        // var lines;
+                        if (__settings.verbose) {
+                            // console.log('inline:', '');
+                        }
+                        for (var j = nextPage.inline_styles.length - 1; j >= 0; j--) {
+
+                            var $ele = $(nextPage.inline_styles[j]);
+                            // lines = $(ele).attr('innerHTML');
+
+                            // // remove CDATA?
+                            // lines = lines.replace('<!--/*--><![CDATA[/*><!--*/', '');
+                            // lines = lines.replace('/*]]>*/-->', '');
+                            // lines = lines.trim();
+                            // lines = lines;
+
+                            // if (__settings.verbose) {
+                            //     console.log('inline: inject=', lines.substr(0, 100));
+                            // }
+                            var ele_string = $ele.wrap('<noscript></noscript>').html();
+                            if (__settings.verbose) {
+                                console.log('inline: inject=', ele_string.substr(0, 100));
+                            }
+                            this.inject_point.append();
+                        }
+
+                        // var $style = $('<style />', {
+                        //     type: 'text/css',
+                        //     text: lines
+                        // });
+
+                        // var insert = $style.wrap('<noscript></noscript>');
+
+                        // this.inject_point.append(ele.wrap('<noscript></noscript>'));
+
+                        if (__settings.verbose) {
+                            console.log(nextPage.inline_styles);
+                        }
+
+                        // this.inject_point.append(nextPage.inline_styles);
                     }
 					return cb ? cb(null, nextPage) : nextPage;
 				}
