@@ -1,5 +1,5 @@
 /*
- *  jquery-async-navigator - v0.0.31
+ *  jquery-async-navigator - v0.0.32
  *  Provides async navigation to legacy browser request/loading based websites.
  *  https://github.com/electblake/jquery-async-navigator
  *
@@ -191,6 +191,8 @@
                                 $(__settings.selector).html(nextPage.main_content);
                                 // remove previous injections
                                 previous_async_assets = __this.inject_point.children();
+                                console.log('previous_async_assets', previous_async_assets);
+                                previous_async_assets = previous_async_assets.add($('head .async-asset'));
 
                                 if (nextPage.body_class) {
                                     $('body')[0].className = nextPage.body_class;
@@ -518,6 +520,9 @@
                         if (__settings.verbose) {
                             // console.log('inline:', '');
                         }
+
+                        // this.inject_point.append(nextPage.inline_styles);
+
                         for (var j = nextPage.inline_styles.length - 1; j >= 0; j--) {
 
                             var ele = $(nextPage.inline_styles[j]);
@@ -532,11 +537,11 @@
                             // if (__settings.verbose) {
                             //     console.log('inline: inject=', lines.substr(0, 100));
                             // }
-                            var ele_string = '<style>'+lines+'</style>';
+                            var ele_string = '<style class="async-asset">'+lines+'</style>';
                             if (__settings.verbose) {
                                 console.log('inline: inject=', ele_string.substr(0, 100));
                             }
-                            this.inject_point.append(ele_string);
+                            $('head').append(ele_string);
                         }
 
                         // var $style = $('<style />', {
