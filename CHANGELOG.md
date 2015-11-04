@@ -1,3 +1,11 @@
+### 0.0.33 (2015-11-04)
+
+
+#### Bug Fixes
+
+* **Asset Injection:** insert inline asset into head, and remove during garbage collection ([d507ec89](https://github.com/electblake/jquery-async-navigator/commit/d507ec89295fe6a863290f7af394b274958b7c39))
+
+
 ### 0.0.32 (2015-11-04)
 
 
