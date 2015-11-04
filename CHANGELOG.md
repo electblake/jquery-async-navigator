@@ -1,3 +1,11 @@
+### 0.0.26 (2015-11-04)
+
+
+#### Features
+
+* **Compatability:** better use of modernizr for popstate feature detection, and .empty() vs. html(nu ([cc1e7581](https://github.com/electblake/jquery-async-navigator/commit/cc1e7581daffc985518bc86ed52796555a1680aa))
+
+
 ### 0.0.25 (2015-11-03)
 
 
