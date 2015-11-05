@@ -1,3 +1,11 @@
+### 0.0.34 (2015-11-05)
+
+
+#### Features
+
+* **Compatability:** added IE11 support using Modernizr for feature detection (in parts, still refere ([80b647ec](https://github.com/electblake/jquery-async-navigator/commit/80b647ec832bdd360ff11799a709339ad5f984d7))
+
+
 ### 0.0.33 (2015-11-04)
 
 
