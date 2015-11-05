@@ -94,7 +94,7 @@
 					this.settings.selector = '#' + this.element.attr('id');
 
                     // attach async popstate
-					if ($('html').hasClass('history')) {
+					if (Modernizr.history) {
                         var onPopState = window._.bind(function() {
     						try {
                                 if (event) {
@@ -118,7 +118,7 @@
                                         if (this.settings.verbose) {
                                             console.log('could not find popstate in event, using history.go(-1)', event);
                                         }
-        	    		    			// history.go(-1);
+        	    		    			history.go(0);
         	    		    		}
                                 }
     	    		    	} catch (err) {
@@ -269,7 +269,9 @@
 				},
 				getNextPage: function (url, next) {
 
-					if (this.settings.verbose) {
+                    var __settings = this.settings;
+
+					if (__settings.verbose) {
 						console.log('getNextPage', url);
 					}
 
@@ -287,11 +289,14 @@
 
 							var page = $(data);
 
-							var main_content = page.find(this.settings.selector).attr('innerHTML');
+							var main_content = page.find(__settings.selector).attr('innerHTML');
 
 							if (main_content && main_content.length > 0) {
 								nextPage.page_title = page.filter('title').text();
-								nextPage.body_class = page.filter('#body').attr('class');
+								nextPage.body_class = page.filter('#body')[0].className;
+                                if (__settings.verbose) {
+                                    console.log('scrape: body_class=', nextPage.body_class);
+                                }
 								nextPage.main_content = main_content;
                                 nextPage.data_attrs = {
                                     html: page.filter('html').data(),
@@ -299,17 +304,17 @@
                                 };
 
 								// scripts
-								if (this.settings.load_scripts) {
+								if (__settings.load_scripts) {
 									nextPage.scripts = page.filter('script').toArray();
 								}
 
 								// styles
-								if (this.settings.load_styles) {
+								if (__settings.load_styles) {
 									nextPage.styles = page.filter('link[rel="stylesheet"]').toArray();
 								}
 
 								// inline styles
-								if (this.settings.inline_styles) {
+								if (__settings.inline_styles) {
 									nextPage.inline_styles = page.filter('style[type="text/css"]').toArray();
 								}
 							}
@@ -318,7 +323,7 @@
 
 						}, this),
 						error: function(req, status, err) {
-							if (this.settings.verbose) {
+							if (__settings.verbose) {
 								console.log('status', status);
 							}
 							next(err);
@@ -434,13 +439,30 @@
 				inline_styles: function(nextPage, cb) {
 
                     var __settings = this.settings;
-					if (this.settings.verbose) {
-						console.log('inline: discovered=', nextPage.inline_styles.length);
-					}
+
+                    if (__settings.verbose) {
+                        console.log('inline: discovered=', nextPage.inline_styles.length);
+                    }
+
+                    var cross_browser_addcss = function(css) {
+                        var head = document.getElementsByTagName('head')[0];
+                        var s = document.createElement('style');
+                        s.setAttribute('type', 'text/css');
+                        if (s.styleSheet) {   // IE
+                            s.styleSheet.cssText = css;
+                        } else {                // the world
+                            s.appendChild(document.createTextNode(css));
+                        }
+                        head.appendChild(s);
+                        if (__settings.verbose) {
+                            console.log('inline: cross_browser_addcss', css.substr(0, 15));
+                        }
+                    };
 
                     // @feature ie support;
                     if ($('body').hasClass('ie')) {
                         console.log('inline: IE detected', 'IE support is experimental.');
+
                         if (nextPage.inline_styles) {
 
                             var inline_inject_styles_IE9 = function (rule) {
@@ -461,7 +483,7 @@
                                 rules = rules.replace('/*]]>*/-->', '');
                                 rules = rules.trim();
 
-                                if (this.settings.verbose) {
+                                if (__settings.verbose) {
                                     console.log('inline: inject=', rules.substr(0, 100));
                                 }
 
@@ -472,11 +494,12 @@
                                 }
                                 else if ($('body').hasClass('ie11'))
                                 {
-                                    var $styleElement = $('<style />', {
-                                        type: 'text/css',
-                                        text: rules
-                                    });
-                                    this.inject_point.append($styleElement);
+                                    cross_browser_addcss(rules);
+                                    // var $styleElement = $('<style />', {
+                                    //     type: 'text/css',
+                                    //     text: rules
+                                    // });
+                                    // this.inject_point.append($styleElement);
                                 }
 
 
